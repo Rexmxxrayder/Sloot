@@ -1,5 +1,4 @@
 using System;
-using UnityEngine.Events;
 
 public abstract class EntityCollider<T,U> : EntityComponent {
     protected bool isMainCollider = false;

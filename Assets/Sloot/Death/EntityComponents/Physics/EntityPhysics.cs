@@ -2,14 +2,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using Sloot;
-using System.Reflection;
-using System.Net.Mail;
-
 public class EntityPhysics : EntityComponent {
     public enum PhysicPriority {
-        INPUT = 1, DASH = 2, BLOCK = 3, PROJECTION = 4, ENVIRONNEMENT = 5, SYSTEM = 6
+        INPUT = 1, DASH = 2, PROJECTION = 3, RESTRICTION = 4, ENVIRONNEMENT = 5, SYSTEM = 6
     }
 
     [SerializeField] Rigidbody _rb;

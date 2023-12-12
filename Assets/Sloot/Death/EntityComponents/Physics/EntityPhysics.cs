@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-public class EntityPhysics : EntityComponent {
+public class EntityPhysics : EntityComponent, IEntityPhysics {
     public enum PhysicPriority {
         INPUT = 1, DASH = 2, PROJECTION = 3, RESTRICTION = 4, ENVIRONNEMENT = 5, SYSTEM = 6
     }
@@ -17,6 +17,8 @@ public class EntityPhysics : EntityComponent {
     public Vector3 Velocity => _velocity;
     public Vector3 Direction => _velocity.normalized;
 
+    Vector3 IEntityPhysics.Velocity => Velocity;
+    Vector3 IEntityPhysics.Direction => Direction;
 
     private void FixedUpdate() {
         _velocity = ComputeForces();
@@ -40,6 +42,9 @@ public class EntityPhysics : EntityComponent {
     #endregion
 
     #region Get/Set
+    public void Add(Force force) {
+        Add(force, PhysicPriority.SYSTEM);
+    }
 
     public void Add(Force force, PhysicPriority forcePriority, bool CrushEqualAndUnderForces = true) {
         if (!_forces.ContainsKey((int)forcePriority)) { _forces.Add((int)forcePriority, new List<Force>()); }

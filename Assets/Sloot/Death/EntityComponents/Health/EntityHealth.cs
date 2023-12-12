@@ -5,13 +5,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EntityHealth : EntityComponent{
+public class EntityHealth : EntityComponent , IEntityHealth {
 
     private RangeInt health = new();
     [SerializeField] private int startMaxHealth;
     [SerializeField] private int startHealth;
     public int Health => health.CurrentValue;
     public int MaxHealth => health.MaxValue;
+
+    float IEntityHealth.Health => Health;
+
+    float IEntityHealth.MaxHealth => MaxHealth;
 
     private List<string> damageList = new();
     private List<string> healList = new();
@@ -51,6 +55,9 @@ public class EntityHealth : EntityComponent{
         }
     }
 
+    public int AddHealth(float heal) {
+        return AddHealth((int)heal);
+    }
 
     public int AddHealth(int heal, string type = "") {
         if (healModifier != null) {
@@ -63,6 +70,9 @@ public class EntityHealth : EntityComponent{
 
         healList.Add(type);
         return health.IncreaseOf(heal);
+    }
+    public int RemoveHealth(float damage) {
+        return RemoveHealth((int)damage);
     }
 
     public int RemoveHealth(int damage, string type = "") {

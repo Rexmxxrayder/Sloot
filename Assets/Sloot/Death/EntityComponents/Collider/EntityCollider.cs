@@ -2,6 +2,7 @@ using System;
 using UnityEngine.Events;
 
 public abstract class EntityCollider<T,U> : EntityComponent {
+    protected bool isMainCollider = false;
     protected bool isActive = true;
     public virtual bool IsActive {
         get { return isActive; }
@@ -9,9 +10,13 @@ public abstract class EntityCollider<T,U> : EntityComponent {
             isActive = value;
         }
     }
+    public bool IsMainCollider => isMainCollider;
 
     protected override void ResetSetup() {
         ResetListeners();
+        if(GetRootGameObject() == gameObject) {
+            isMainCollider = true;
+        }
     }
 
     #region Events

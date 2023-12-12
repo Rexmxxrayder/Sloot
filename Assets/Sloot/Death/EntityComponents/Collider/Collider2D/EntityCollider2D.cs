@@ -1,12 +1,33 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EntityCollider2D : EntityCollider<Collision2D,Collider2D> {
+public class EntityCollider2D : EntityCollider<Collision2D, Collider2D> {
     #region Setup
-    protected override void DefinitiveSetup() {
-        if (RootGet<EntityMainCollider2D>() == null) {
-            GetRootGameObject().AddComponent<EntityMainCollider2D>();
+    protected override void LoadSetup() {
+        if (isMainCollider) {
+            foreach (EntityCollider2D collider in GetRootComponents<EntityCollider2D>()) {
+                if (collider == this) {
+                    continue;
+                }
+
+                AssignTo(collider);
+            }
+        } else {
+            if (!GetRoot().TryGetComponent(out EntityCollider2D _)) {
+                GetRoot().AddComponent<EntityCollider2D>();
+            }
         }
+    }
+
+    public static EntityCollider2D GetMainCollider(EntityComponent component) {
+        foreach (EntityCollider2D collider in component.GetRoot().GetRootComponents<EntityCollider2D>()) {
+            if (collider.isMainCollider) {
+                return collider;
+            }
+        }
+
+        return null;
     }
     #endregion
 

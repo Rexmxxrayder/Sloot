@@ -46,7 +46,7 @@ public class EntityHealth : EntityComponent{
     protected override void LoadSetup() {
         OnZeroHealth += Die;
         OnZeroHealth += RemoveAllListeners;
-        if(RootGet<EntityHealthModfier>() == null) {
+        if(GetRootComponent<EntityHealthModfier>() == null) {
             gameObject.AddComponent<EntityHealthModfier>();
         }
     }

@@ -84,8 +84,7 @@ namespace Sloot {
         }
 
         void Reset(T instance) {
-            instance.transform.position = Vector3.zero;
-            instance.transform.rotation = Quaternion.identity;
+            instance.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             instance.StopAllCoroutines();
             foreach (IReset component in instance.GetComponentsInChildren<IReset>()) { 
                 component.InstanceReset();

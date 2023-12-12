@@ -8,7 +8,7 @@ public class EntityHealthModfier : EntityComponent
     private ValueModifierContainer<IHealModifier, int> healModifier = new();
     private EntityHealth entityHealth;
     protected override void LoadSetup() {
-        entityHealth = RootGet<EntityHealth>();
+        entityHealth = GetRootComponent<EntityHealth>();
         if(entityHealth != null ) {
             entityHealth.DamageModifier += damageModifier;
             entityHealth.HealModifier += healModifier;

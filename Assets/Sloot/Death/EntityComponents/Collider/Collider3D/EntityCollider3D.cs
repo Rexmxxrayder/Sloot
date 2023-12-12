@@ -1,13 +1,34 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class EntityCollider3D : EntityCollider<Collision, Collider> {
 
     #region Setup
-    protected override void DefinitiveSetup() {
-        if (RootGet<EntityMainCollider3D>() == null) {
-            GetRootGameObject().AddComponent<EntityMainCollider3D>();
+    protected override void LoadSetup() {
+        if (isMainCollider) {
+            foreach (EntityCollider3D collider in GetRootComponents<EntityCollider3D>()) {
+                if (collider == this) {
+                    continue;
+                }
+
+                AssignTo(collider);
+            }
+        } else {
+            if (!GetRoot().TryGetComponent(out EntityCollider3D _)) {
+                GetRoot().AddComponent<EntityCollider3D>();
+            }
         }
+    }
+
+    public static EntityCollider3D GetMainCollider(EntityComponent component) {
+        foreach (EntityCollider3D collider in component.GetRoot().GetRootComponents<EntityCollider3D>()) {
+            if (collider.isMainCollider) {
+                return collider;
+            }
+        }
+
+        return null;
     }
     #endregion
 

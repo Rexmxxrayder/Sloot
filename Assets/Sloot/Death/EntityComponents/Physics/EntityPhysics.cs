@@ -31,10 +31,10 @@ public class EntityPhysics : EntityComponent {
     #region EntityComponentFunctions
     protected override void DefinitiveSetup() {
         if (_rb == null) {
-            if (_root.GetComponent<Rigidbody>() == null) {
+            if (root.GetComponent<Rigidbody>() == null) {
                 _rb = GetRootGameObject().AddComponent<Rigidbody>();
             } else {
-                _rb = _root.GetComponent<Rigidbody>();
+                _rb = root.GetComponent<Rigidbody>();
             }
         }
         _rb.useGravity = false;

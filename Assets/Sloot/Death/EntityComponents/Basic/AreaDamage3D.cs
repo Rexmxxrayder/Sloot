@@ -33,11 +33,11 @@ public class AreaDamage3D : EntityRoot {
     }
 
     private void AddEntityHealth(Collision collision) {
-        AddEntityHealth(collision.gameObject.RootGet<EntityHealth>(), true);
+        AddEntityHealth(collision.gameObject.GetRootComponent<EntityHealth>(), true);
     }
 
     private void AddEntityHealth(Collider collision) {
-        AddEntityHealth(collision.gameObject.RootGet<EntityHealth>(), false);
+        AddEntityHealth(collision.gameObject.GetRootComponent<EntityHealth>(), false);
     }
 
     protected virtual void AddEntityHealth(EntityHealth health, bool Collision) {
@@ -57,11 +57,11 @@ public class AreaDamage3D : EntityRoot {
     }
 
     private void RemoveEntityHealth(Collision collision) {
-        RemoveEntityHealth(collision.gameObject.RootGet<EntityHealth>());
+        RemoveEntityHealth(collision.gameObject.GetRootComponent<EntityHealth>());
     }
 
     private void RemoveEntityHealth(Collider collision) {
-        RemoveEntityHealth(collision.gameObject.RootGet<EntityHealth>());
+        RemoveEntityHealth(collision.gameObject.GetRootComponent<EntityHealth>());
     }
 
     private void RemoveEntityHealth(EntityHealth health) {
@@ -96,21 +96,19 @@ public class AreaDamage3D : EntityRoot {
         entitiesInsideVisual.AddRange(entitiesInside.Keys.Where(item => item != null).Select(item => item.name).ToList());
     }
 
-    protected override void ResetSetup() {
-        base.ResetSetup();
-        if(RootGet<EntityMainCollider3D>() == null) { 
-            GetRoot().AddComponent<EntityMainCollider3D>();
-        }
-    }
-
     protected override void LoadSetup() {
         base.LoadSetup();
-        RootGet<EntityMainCollider3D>().OnCollisionEnterDelegate += AddEntityHealth;
-        RootGet<EntityMainCollider3D>().OnTriggerEnterDelegate += AddEntityHealth;
-        RootGet<EntityMainCollider3D>().OnCollisionStayDelegate += AddEntityHealth;
-        RootGet<EntityMainCollider3D>().OnTriggerStayDelegate += AddEntityHealth;
-        RootGet<EntityMainCollider3D>().OnCollisionExitDelegate += RemoveEntityHealth;
-        RootGet<EntityMainCollider3D>().OnTriggerExitDelegate += RemoveEntityHealth;
+        EntityCollider3D mainCollider = EntityCollider3D.GetMainCollider(this);
+        if(mainCollider == null) {
+            mainCollider = GetRoot().AddComponent<EntityCollider3D>();
+        }
+
+        mainCollider.OnCollisionEnterDelegate += AddEntityHealth;
+        mainCollider.OnTriggerEnterDelegate += AddEntityHealth;
+        mainCollider.OnCollisionStayDelegate += AddEntityHealth;
+        mainCollider.OnTriggerStayDelegate += AddEntityHealth;
+        mainCollider.OnCollisionExitDelegate += RemoveEntityHealth;
+        mainCollider.OnTriggerExitDelegate += RemoveEntityHealth;
 
         if (damageables.Count == 0) {
             UnityEngine.Debug.LogWarning("No damageables in the AreaDamage3D of " + GetRoot().name);
